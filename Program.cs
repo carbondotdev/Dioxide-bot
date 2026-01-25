@@ -4,11 +4,11 @@ using NetCord.Logging;
 using NetCord.Rest;
 using NetCord.Services;
 using NetCord.Services.ApplicationCommands;
+using NetCord.Services.ComponentInteractions;
 using TestCommands;
 
 // Bot Token
 DotNetEnv.Env.Load();
-
 string TOKEN = Environment.GetEnvironmentVariable("DISCORD_TOKEN")
     ?? throw new Exception("DISCORD_TOKEN is not set");
 
@@ -19,9 +19,12 @@ GatewayClient client = new(new BotToken(TOKEN), new GatewayClientConfiguration
 });
 
 
-// Command Service
+// Interaction Service
 ApplicationCommandService<ApplicationCommandContext> acs = new();
 acs.AddModules(typeof(Program).Assembly);
+
+ComponentInteractionService<ComponentInteractionContext> cis = new();
+cis.AddModules(typeof(Program).Assembly);
 
 // Handler
 client.InteractionCreate += async interaction =>
@@ -39,6 +42,8 @@ client.InteractionCreate += async interaction =>
     {
         await interaction.SendResponseAsync(InteractionCallback.Message(failResult.Message));
     } catch {}
+
+    
 };
 
 await acs.RegisterCommandsAsync(client.Rest, client.Id);

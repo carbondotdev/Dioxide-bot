@@ -114,7 +114,7 @@ public class Horse
         private static string? activeAddress;
         private readonly ConcurrentDictionary<string, byte[]> _cache = new();
         public string[]? _horselist;
-        private string[] apiList = ["http://192.168.1.13:5000", "http://192.168.1.8:5000"];
+        private string[] apiList = ["http://192.168.1.16:5000", "http://192.168.1.8:5000"];
 
 
         public async Task<bool> LoadHorseList()
