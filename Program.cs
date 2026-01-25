@@ -5,6 +5,7 @@ using NetCord.Rest;
 using NetCord.Services;
 using NetCord.Services.ApplicationCommands;
 using NetCord.Services.ComponentInteractions;
+using Sprache;
 using TestCommands;
 
 // Bot Token
@@ -29,21 +30,26 @@ cis.AddModules(typeof(Program).Assembly);
 // Handler
 client.InteractionCreate += async interaction =>
 {
-    // checks if the interaction is a application command
-    if (interaction is not ApplicationCommandInteraction aci)
-        return;
-
-    var result = await acs.ExecuteAsync(new ApplicationCommandContext(aci, client));
-
-    if (result is not IFailResult failResult)
-        return;
-
-    try
+    // Slash Command Handler
+    if (interaction is ApplicationCommandInteraction slashCmd)
     {
-        await interaction.SendResponseAsync(InteractionCallback.Message(failResult.Message));
-    } catch {}
+        var result = await acs.ExecuteAsync(new ApplicationCommandContext(slashCmd, client));
 
-    
+        if (result is IFailResult failResult)
+        {
+            await interaction.SendResponseAsync(InteractionCallback.Message(failResult.Message));
+        }
+    }
+
+    if (interaction is ComponentInteraction cmpnt)
+    {
+        var result = await cis.ExecuteAsync(new ComponentInteractionContext(cmpnt, client));
+        
+        if (result is IFailResult failResult)
+        {
+            await interaction.SendResponseAsync(InteractionCallback.Message(failResult.Message));
+        }
+    }
 };
 
 await acs.RegisterCommandsAsync(client.Rest, client.Id);
