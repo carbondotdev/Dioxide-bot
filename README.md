@@ -1,7 +1,9 @@
 # Dioxide
 ---
-Discord bot that is designed to do multiple of things (mostly useless).
+
+### Discord bot that is designed to do multiple of things (mostly useless).
 My first ever public project
+
 ---
 ## Work-in-Progress Features:
 - Tic Tac Toe
